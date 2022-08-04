@@ -40,7 +40,7 @@ class _CalcButtonState extends State<CalcButton> {
       style: ElevatedButton.styleFrom(
         shape: const CircleBorder(),
         padding: const EdgeInsets.all(20),
-        fixedSize: Size.square(80),
+        fixedSize: const Size.square(80),
       ).copyWith(
         backgroundColor: MaterialStateProperty.all<Color?>(_buttonColor),
       ),
