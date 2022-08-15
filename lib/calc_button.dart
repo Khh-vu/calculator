@@ -6,49 +6,45 @@ class CalcButton extends StatefulWidget {
     required this.text,
     required this.textColor,
     required this.buttonColor,
+    required this.buttonTap,
   }) : super(key: key);
 
   final String text;
-  final Color? textColor;
-  final Color? buttonColor;
+  final Color textColor;
+  final Color buttonColor;
+  final VoidCallback buttonTap;
 
   @override
   State<CalcButton> createState() => _CalcButtonState();
 }
 
 class _CalcButtonState extends State<CalcButton> {
-  late Color? _textColor;
-  late Color? _buttonColor;
-
   @override
   void initState() {
-    _textColor = widget.textColor;
-    _buttonColor = widget.buttonColor;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: () {
-        setState(() {
-          final temp = _buttonColor;
-          _buttonColor = _textColor;
-          _textColor = temp;
-        });
-      },
-      style: ElevatedButton.styleFrom(
-        shape: const CircleBorder(),
-        padding: const EdgeInsets.all(20),
-        fixedSize: const Size.square(80),
-      ).copyWith(
-        backgroundColor: MaterialStateProperty.all<Color?>(_buttonColor),
-      ),
-      child: Text(
-        widget.text,
-        style: TextStyle(
-          fontSize: 30,
-          color: _textColor,
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(20),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(20),
+          onTap: widget.buttonTap,
+          child: Container(
+            color: widget.buttonColor,
+            child: Center(
+              child: Text(
+                widget.text,
+                style: TextStyle(
+                  color: widget.textColor,
+                  fontSize: 20,
+                ),
+              ),
+            ),
+          ),
         ),
       ),
     );
