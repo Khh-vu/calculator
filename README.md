@@ -1,6 +1,10 @@
-# calculator
+# Flutter: Calculator
+Simple Calculator app with Flutter.
 
-A new Flutter project.
+NOTE: Only potrait mode.
+
+# Packages Used
+math_expressions v2.3.1
 
 ## Getting Started
 
