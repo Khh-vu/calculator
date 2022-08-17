@@ -1,5 +1,6 @@
 import 'package:calculator/calc_button.dart';
 import 'package:flutter/material.dart';
+import 'package:math_expressions/math_expressions.dart';
 
 void main() {
   runApp(const MyApp());
@@ -26,27 +27,30 @@ class Calculator extends StatefulWidget {
 }
 
 class _CalculatorState extends State<Calculator> {
+  var question = '';
+  var answer = '';
+
   final List<String> buttons = [
     'C',
     'DEL',
     '%',
-    '+/-',
+    '+',
     '7',
     '8',
     '9',
-    '+',
+    '-',
     '4',
     '5',
     '6',
-    '-',
+    '*',
     '1',
     '2',
     '3',
-    '*',
-    '.',
-    '0',
-    '=',
     '/',
+    '00',
+    '0',
+    '.',
+    '=',
   ];
 
   bool isOperator(String operator) {
@@ -60,9 +64,17 @@ class _CalculatorState extends State<Calculator> {
     return false;
   }
 
-  double text = 0;
-  double num1 = 0;
-  double num2 = 0;
+  void onEqualPress() {
+    try {
+      String finalQuestion = question.replaceAll('%', '/100');
+      Expression expression = Parser().parse(finalQuestion);
+      double finalAnswer =
+          expression.evaluate(EvaluationType.REAL, ContextModel());
+      answer = finalAnswer.toString();
+    } catch (e) {
+      answer = 'Syntax Error';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +89,33 @@ class _CalculatorState extends State<Calculator> {
       backgroundColor: Colors.black,
       body: Column(
         children: [
-          Expanded(child: Container()),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(
+                    question,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                    ),
+                    textAlign: TextAlign.left,
+                  ),
+                  Text(
+                    answer,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 25,
+                    ),
+                    textAlign: TextAlign.right,
+                  ),
+                ],
+              ),
+            ),
+          ),
           Expanded(
             flex: 2,
             child: GridView.builder(
@@ -86,16 +124,41 @@ class _CalculatorState extends State<Calculator> {
                 crossAxisCount: 4,
               ),
               itemBuilder: (context, index) {
-                if (index < 4) {
+                if (index < 3) {
                   return CalcButton(
-                    buttonTap: () {},
+                    buttonTap: () {
+                      setState(() {
+                        switch (buttons[index]) {
+                          case 'C':
+                            question = '';
+                            break;
+                          case 'DEL':
+                            if (question.isNotEmpty) {
+                              question =
+                                  question.substring(0, question.length - 1);
+                            }
+                            break;
+                          case '%':
+                            question += buttons[index];
+                            break;
+                        }
+                      });
+                    },
                     text: buttons[index],
                     textColor: Colors.black,
                     buttonColor: Colors.grey,
                   );
                 } else {
                   return CalcButton(
-                    buttonTap: () {},
+                    buttonTap: () {
+                      setState(() {
+                        if (buttons[index] != '=') {
+                          question += buttons[index];
+                        } else {
+                          onEqualPress();
+                        }
+                      });
+                    },
                     text: buttons[index],
                     textColor: Colors.white,
                     buttonColor: isOperator(buttons[index])

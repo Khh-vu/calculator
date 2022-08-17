@@ -28,20 +28,20 @@ class _CalcButtonState extends State<CalcButton> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: ClipRRect(
+      child: InkWell(
         borderRadius: BorderRadius.circular(20),
-        child: InkWell(
-          borderRadius: BorderRadius.circular(20),
-          onTap: widget.buttonTap,
-          child: Container(
+        onTap: widget.buttonTap,
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
             color: widget.buttonColor,
-            child: Center(
-              child: Text(
-                widget.text,
-                style: TextStyle(
-                  color: widget.textColor,
-                  fontSize: 20,
-                ),
+          ),
+          child: Center(
+            child: Text(
+              widget.text,
+              style: TextStyle(
+                color: widget.textColor,
+                fontSize: 20,
               ),
             ),
           ),
